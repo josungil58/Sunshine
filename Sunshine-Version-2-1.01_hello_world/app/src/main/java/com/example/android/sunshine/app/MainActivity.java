@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -140,30 +139,36 @@ public class MainActivity extends ActionBarActivity {
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
+                //this method can be called before connection, options, head, put, delete, trace 등의 request 방법이 있음
                 urlConnection.connect();
 
                 // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
+                //inputStream is used to read data from the internet(getInputStream())
                 StringBuffer buffer = new StringBuffer();
+                //mainly used to interact with legacy APIs that expose it
                 if (inputStream == null) {
                     // Nothing to do.
                     return null;
-
                 }
                 reader = new BufferedReader(new InputStreamReader(inputStream));
+                //inputStreamReader가 inputStream으로 읽은 data를 문자로 변환
 
                 String line;
+
                 while ((line = reader.readLine()) != null) {
+                    //public String readLind(); returns the next line of text available from this reader
                     // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                     // But it does make debugging a *lot* easier if you print out the completed
                     // buffer for debugging.
                     buffer.append(line + "\n");
+                    //buffer도 class. public StringBuilder append(String str)
                 }
 
                 if (buffer.length() == 0) {
                     // Stream was empty.  No point in parsing.
+                    //length() returns the number of characters in this sequence
                     return null;
-
                 }
                 forecastJsonStr = buffer.toString();
 
@@ -184,16 +189,10 @@ public class MainActivity extends ActionBarActivity {
 
                     } catch (final IOException e) {
                         Log.e("PlaceholderFragment", "Error closing stream", e);
-
                     }
-
                 }
-
             }
-
             return rootView;
         }
-
-
     }
 }
