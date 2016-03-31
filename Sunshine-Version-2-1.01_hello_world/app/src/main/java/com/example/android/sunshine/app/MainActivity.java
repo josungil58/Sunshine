@@ -1,25 +1,9 @@
 package com.example.android.sunshine.app;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -42,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     //beginTransaction()은 activity state저장전에 사용
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new ForecastFragment())
                             //FragmentTransaction class 참조
                     .commit();
         }
@@ -70,129 +54,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {//PlaceholderFragment도 fragment
-
-        ArrayAdapter<String> mForecastAdapter;
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            //onCreateView()는 fragment가 자신의 user interface를 instantiate 하기 위해 call
-
-            //create some dummy data for the ListView.
-            String[] data = {
-                    "Today - Sunny - 88/63",
-                    "Tommorrow - Foggy - 70/40",
-                    "Weds - Cloudy - 72/63",
-                    "Thurs - Asteroids - 75/65",
-                    "Fri - Heavy Rain - 65/56",
-                    "Sat - Help Trapped in Weatherstation - 60/51",
-                    "Sun - Sunny - 80/68"
-            };
-            List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
-
-            //create an ArrayAdapter
-            mForecastAdapter =
-                    new ArrayAdapter<String>(
-                            getActivity(),
-                            R.layout.list_item_forecast,//layout .xml file's name
-                            R.id.list_item_forecast_textview,//.xml file 내 textview's id
-                            weekForecast
-                    );
-            //public ArrayAdapter(Context context, int resource, int textViewResourceID, T[] objects) 형태의 constructor
-            //resource - ID for a layout file
-
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            ListView listView = (ListView) rootView.findViewById(
-                    R.id.listview_forecast);//fragment_main.xml listview id
-            listView.setAdapter(mForecastAdapter);//sets the data behind this ListView
-
-            // These two need to be declared outside the try/catch
-            // so that they can be closed in the finally block.
-            HttpURLConnection urlConnection = null;
-            //urlConnection class 상속
-            //null은 연결하지 않겠다는 의미로 추정
-            BufferedReader reader = null;
-            //data reading using buffer
-
-            // Will contain the raw JSON response as a string.
-            String forecastJsonStr = null;
-            //아직은 연결하지 않겠다는 의미 - null, 장래 활용
-
-            try {
-                // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are avaiable at OWM's forecast API page, at
-                // http://openweathermap.org/API#forecast
-                String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
-                //날씨 data 7개를 받아서 string형식으로 저장
-                String apiKey = "&APPID=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
-                URL url = new URL(baseUrl.concat(apiKey));
-
-                // Create the request to OpenWeatherMap, and open the connection
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                //this method can be called before connection, options, head, put, delete, trace 등의 request 방법이 있음
-                urlConnection.connect();
-
-                // Read the input stream into a String
-                InputStream inputStream = urlConnection.getInputStream();
-                //inputStream is used to read data from the internet(getInputStream())
-                StringBuffer buffer = new StringBuffer();
-                //mainly used to interact with legacy APIs that expose it
-                if (inputStream == null) {
-                    // Nothing to do.
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                //inputStreamReader가 inputStream으로 읽은 data를 문자로 변환
-
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    //public String readLind(); returns the next line of text available from this reader
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
-                    buffer.append(line + "\n");
-                    //buffer도 class. public StringBuilder append(String str)
-                }
-
-                if (buffer.length() == 0) {
-                    // Stream was empty.  No point in parsing.
-                    //length() returns the number of characters in this sequence
-                    return null;
-                }
-                forecastJsonStr = buffer.toString();
-
-            } catch (IOException e) {
-                Log.e("PlaceholderFragment", "Error ", e);
-                // If the code didn't successfully get the weather data, there's no point in attemping
-                // to parse it.
-                return null;
-
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-
-                    } catch (final IOException e) {
-                        Log.e("PlaceholderFragment", "Error closing stream", e);
-                    }
-                }
-            }
-            return rootView;
-        }
     }
 }
