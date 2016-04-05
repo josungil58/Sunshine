@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 /**
  * Encapsulates fetching the forecast and displaying it as a (@link ListView) layout
  */
@@ -31,6 +35,36 @@ public class ForecastFragment extends Fragment {
     public ForecastFragment() {
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        //called to do initial creation of a fragment
+        //Bundle에 저장된 Instance State를 불러옴
+        //onCreate()는 여기서는 public으로 지정해야 main activity에서 사용 가능
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        //added in order for this fragment to handle menu events
+        }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.forecastfragment, menu);
+      }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_refresh) {//main.xml의 item id
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
