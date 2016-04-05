@@ -61,6 +61,8 @@ public class ForecastFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {//main.xml의 item id
+            FetchWeatherTask weatherTask = new FetchWeatherTask();
+            weatherTask.execute();
             return true;
         }
         return super.onOptionsItemSelected(item);
