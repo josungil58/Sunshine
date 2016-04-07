@@ -170,6 +170,7 @@ public class ForecastFragment extends Fragment {
                     return null;
                 }
                 forecastJsonStr = buffer.toString();
+                Log.v(LOG_TAG, "Forecast Jason String: " + forecastJsonStr);
 
             } catch (IOException e) {
                 Log.e("LOG_TAG", "Error ", e);
