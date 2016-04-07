@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -62,7 +63,7 @@ public class ForecastFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {//main.xml의 item id
             FetchWeatherTask weatherTask = new FetchWeatherTask();
-            weatherTask.execute();
+            weatherTask.execute("94043");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -103,7 +104,7 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
-    public class FetchWeatherTask extends AsyncTask<Void, Void, Void> {
+    public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
         //AsyncTask enables proper and easy use of the UI thread.
         //AsyncTask should ideally be used for short operations (a few seconds at the most)
 
@@ -111,11 +112,17 @@ public class ForecastFragment extends Fragment {
         //.getSimpleName() returns simple name of the class
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(String... params) {
             //invoke on the background thread immediately after onPreExecute() finishes executing
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
+
+            //If there's no zip code, there's nothing to look up. Verify size of params.
+            if(params.length == 0){
+                return null;
+            }
+
             HttpURLConnection urlConnection = null;
             //urlConnection class 상속
             //null은 연결하지 않겠다는 의미로 추정
@@ -124,16 +131,40 @@ public class ForecastFragment extends Fragment {
 
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
-            //아직은 연결하지 않겠다는 의미 - null, 장래 활용
+            //아직은 연결하지 않겠다는 의미 - null, 장래 활용//초기값 설정
+            String format = "json";
+            String units ="metric";
+            int numDays = 7;
 
             try {
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are avaiable at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
+                //String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
                 //날씨 data 7개를 받아서 string형식으로 저장
-                String apiKey = "&APPID=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
-                URL url = new URL(baseUrl.concat(apiKey));
+
+                final String FORECAST_BASE_URL =
+                        "http://api.openweathermap.org/data/2.5/forecast/daily?";
+                final String QUERY_PARAM = "q";
+                final String FORMAT_PARAM = "mode";
+                final String UNITS_PARAM = "units";
+                final String DAYS_PARAM = "cnt";
+                final String APPID_PARAM = "APPID";
+
+                Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
+                        .appendQueryParameter(QUERY_PARAM, params[0])
+                        .appendQueryParameter(FORMAT_PARAM, format)
+                        .appendQueryParameter(UNITS_PARAM, units)
+                        .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                        .appendQueryParameter(APPID_PARAM, BuildConfig.OPEN_WEATHER_MAP_API_KEY )
+                        .build();
+
+                //String apiKey = "&APPID=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
+                //URL url = new URL(baseUrl.concat(apiKey));
+
+                URL url = new URL(builtUri.toString());
+
+                Log.v(LOG_TAG, "Built Uri " + builtUri.toString());
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -191,6 +222,8 @@ public class ForecastFragment extends Fragment {
                 }
             }
             return null;
+
+
         }
     }
 
