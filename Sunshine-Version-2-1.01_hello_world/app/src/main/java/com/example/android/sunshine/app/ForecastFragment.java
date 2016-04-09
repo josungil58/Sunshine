@@ -132,6 +132,7 @@ public class ForecastFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
             //아직은 연결하지 않겠다는 의미 - null, 장래 활용//초기값 설정
+
             String format = "json";
             String units ="metric";
             int numDays = 7;
@@ -152,12 +153,19 @@ public class ForecastFragment extends Fragment {
                 final String APPID_PARAM = "APPID";
 
                 Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
+                        //public static Uri parse(String uriString)
+                        // j - Creates a Uri which parses the given encoded URI string
+                        //public abstract Uri.builder buildupon()
+                        // - Construct a new builder, copying the attributes from this Uri
                         .appendQueryParameter(QUERY_PARAM, params[0])
+                        //public Uri.builder appendQueryParameter(String key, String value)
+                        // - Encodes the key and value and then appends the parameter to the query string
                         .appendQueryParameter(FORMAT_PARAM, format)
                         .appendQueryParameter(UNITS_PARAM, units)
                         .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
                         .appendQueryParameter(APPID_PARAM, BuildConfig.OPEN_WEATHER_MAP_API_KEY )
                         .build();
+                        //public Uri build() - constructs a Uri with the current attributes
 
                 //String apiKey = "&APPID=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
                 //URL url = new URL(baseUrl.concat(apiKey));
