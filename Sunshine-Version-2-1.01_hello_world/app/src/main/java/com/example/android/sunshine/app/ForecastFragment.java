@@ -124,7 +124,11 @@ public class ForecastFragment extends Fragment {
             // Because the API returns a unix timestamp (measured in seconds),
             // it must be converted to milliseconds in order to be converted to valid date.
             SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
+            //EEE는 요일(day of week), MMM은 (Jan)
             return shortenedDateFormat.format(time);
+            // public StringBudffer format(Date date, StringBuffer buffer, FieldPosition fieldPos)
+            // formats the specified date as a string using the pattern of this date format
+            // and appends the string to the string buffer
         }
 
         /**
@@ -134,6 +138,7 @@ public class ForecastFragment extends Fragment {
             // For presentation, assume the user doesn't care about tenths of a degree.
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
+            //Math.round(num) - 소수점 첫째 자리에서 반올림한 정수값은 반환하는 메서드
 
             String highLowStr = roundedHigh + "/" + roundedLow;
             return highLowStr;
@@ -146,6 +151,7 @@ public class ForecastFragment extends Fragment {
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
+
         private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
                 throws JSONException {
 
@@ -158,7 +164,10 @@ public class ForecastFragment extends Fragment {
             final String OWM_DESCRIPTION = "main";
 
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
+            //forecastJsonStr data를 JSON Object화 하는 작업
             JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
+            //public JSONArray getJSONArray(String name)
+            //-returns the value mapped by name if it exists and is a JSONArray, ot throws otherwise.
 
             // OWM returns daily forecasts based upon the local time of the city that is being
             // asked for, which means that we need to know the GMT offset to translate this data
@@ -167,18 +176,27 @@ public class ForecastFragment extends Fragment {
             // Since this data is also sent in-order and the first day is always the
             // current day, we're going to take advantage of that to get a nice
             // normalized UTC date for all of our weather.
+            // UTC(협정 세계 표준시, 프랑스어 Temps Universel Coordonné,
+            // 영어: Coordinated Universal Time)는 1970년 1월 1일 자정부터 지정된 날짜 사이의 시간을
+            // 밀리초로 반환
 
             Time dayTime = new Time();
-            dayTime.setToNow();
+            // Time() class의 객체화화
+           dayTime.setToNow();
+            // public void setTime(long time) - sets the time for this time to the supplied milliseconds value
+            // public void setToNow() - sets the time of the given Time object to the current time
 
             // we start at the day returned by local time. Otherwise this is a mess.
             int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
+            // public static int getJulianDay(long millis, long gmtoff)
+            // - computes the Julian day number for a point in time in a particular timezone.
 
             // now we work exclusively in UTC
             dayTime = new Time();
 
             String[] resultStrs = new String[numDays];
             for(int i = 0; i < weatherArray.length(); i++) {
+                // JSONArray.length() returns the number of values in this array
                 // For now, using the format "Day, description, hi/low"
                 String day;
                 String description;
@@ -197,7 +215,9 @@ public class ForecastFragment extends Fragment {
 
                 // description is in a child array called "weather", which is 1 element long.
                 JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
+                // weather data 중에 0번째 data를 받아서 처리
                 description = weatherObject.getString(OWM_DESCRIPTION);
+                //DESCRIPTION = main
 
                 // Temperatures are in a child object called "temp".  Try not to name variables
                 // "temp" when working with temperature.  It confuses everybody.
@@ -210,6 +230,8 @@ public class ForecastFragment extends Fragment {
             }
 
             for (String s : resultStrs) {
+
+                // for(String obj:array) improved for statement for array
                 Log.v(LOG_TAG, "Forecast entry: " + s);
             }
             return resultStrs;
