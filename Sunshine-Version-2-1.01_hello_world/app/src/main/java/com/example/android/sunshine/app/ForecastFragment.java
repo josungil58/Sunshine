@@ -125,6 +125,7 @@ public class ForecastFragment extends Fragment {
             // it must be converted to milliseconds in order to be converted to valid date.
             SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
             //EEE는 요일(day of week), MMM은 (Jan)
+            //SimpleDateFormat class의 객체화
             return shortenedDateFormat.format(time);
             // public StringBudffer format(Date date, StringBuffer buffer, FieldPosition fieldPos)
             // formats the specified date as a string using the pattern of this date format
@@ -181,8 +182,9 @@ public class ForecastFragment extends Fragment {
             // 밀리초로 반환
 
             Time dayTime = new Time();
-            // Time() class의 객체화화
-           dayTime.setToNow();
+            // Time() class의 객체화
+
+            dayTime.setToNow();
             // public void setTime(long time) - sets the time for this time to the supplied milliseconds value
             // public void setToNow() - sets the time of the given Time object to the current time
 
@@ -190,6 +192,7 @@ public class ForecastFragment extends Fragment {
             int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
             // public static int getJulianDay(long millis, long gmtoff)
             // - computes the Julian day number for a point in time in a particular timezone.
+            // public long gmtoff - dffset in seconds from UTC including any DST offset
 
             // now we work exclusively in UTC
             dayTime = new Time();
@@ -268,7 +271,8 @@ public class ForecastFragment extends Fragment {
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are avaiable at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                //String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
+                //String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?
+                // q=94043&mode=json&units=metric&cnt=7";
                 //날씨 data 7개를 받아서 string형식으로 저장
 
                 final String FORECAST_BASE_URL =
@@ -366,9 +370,10 @@ public class ForecastFragment extends Fragment {
                 e.printStackTrace();
             }
             return null;
+            // 현재는 getWeatherDataFromJson()도 background에 포함 진행, 직접 화면에 표출되지 않음
 
 
-        }
+
     }
 
 }
