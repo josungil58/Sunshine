@@ -103,6 +103,7 @@ public class ForecastFragment extends Fragment {
                 );
         //public ArrayAdapter(Context context, int resource, int textViewResourceID, T[] objects) 형태의 constructor
         //resource - ID for a layout file
+        // 여기를 인터넷으로 받은 data로 바로 집어넣을 수 있어야 한다.
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ListView listView = (ListView) rootView.findViewById(
@@ -378,11 +379,14 @@ public class ForecastFragment extends Fragment {
             @Override
             protected void onPostExecute(String[] result){
                 if (result != null) {
-                    mForecastAdapter.clear();
-                    for (String dayForecastStr : result){
+                    mForecastAdapter.clear(); // 기존의 data를 모두 지우고
+                    for (String dayForecastStr : result){ // doInBackground로 받은 data를 새로 입력하라는 뜻.
                         mForecastAdapter.add(dayForecastStr);
                     }
-                    // New data is back from the server. Hooley!
+                 // AsyncTask must be subclassed to be used. The subclass will override at least one method(doInBackground)
+                 // and most often will override a second one (onPostExecute(result))
+                 // runs on UI thread after doInBackground, specified result is the value returned by doInBackground().
+                 // New data is back from the server. Hooray!
                 }
             }
         }
