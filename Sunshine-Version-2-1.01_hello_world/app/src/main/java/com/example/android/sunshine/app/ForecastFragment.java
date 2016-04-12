@@ -2,6 +2,7 @@ package com.example.android.sunshine.app;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
@@ -383,9 +384,12 @@ public class ForecastFragment extends Fragment {
             protected void onPostExecute(String[] result){
                 if (result != null) {
                     mForecastAdapter.clear(); // 기존의 data를 모두 지우고
-                    for (String dayForecastStr : result){ // doInBackground로 받은 data를 새로 입력하라는 뜻.
-                        mForecastAdapter.add(dayForecastStr);
+                    //for (String dayForecastStr : result){ // doInBackground로 받은 data를 새로 입력하라는 뜻.
+                    //    mForecastAdapter.add(dayForecastStr);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                        mForecastAdapter.addAll(result);
                     }
+                }
                  // AsyncTask must be subclassed to be used. The subclass will override at least one method(doInBackground)
                  // and most often will override a second one (onPostExecute(result))
                  // runs on UI thread after doInBackground, specified result is the value returned by doInBackground().
@@ -393,4 +397,12 @@ public class ForecastFragment extends Fragment {
                 }
             }
         }
-    }
+
+/**
+* Warning:(95, 51) Explicit type argument String can be replaced with <>
+Warning:(99, 34) Explicit type argument String can be replaced with <>
+Warning:(130, 52) To get local formatting use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()`, or use `new SimpleDateFormat(String template, Locale locale)` with for example `Locale.US` for ASCII dates.
+Warning:(148, 20) Local variable 'highLowStr' is redundant
+Warning:(321, 30) 'StringBuffer buffer' may be declared as 'StringBuilder'
+Warning:(337, 28) String concatenation as argument to 'StringBuffer.append()' call
+**/
