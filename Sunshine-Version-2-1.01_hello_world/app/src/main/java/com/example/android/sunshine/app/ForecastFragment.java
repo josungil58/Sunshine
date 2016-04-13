@@ -13,8 +13,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -109,6 +111,35 @@ public class ForecastFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(
                 R.id.listview_forecast);//fragment_main.xml listview id
         listView.setAdapter(mForecastAdapter);//sets the data behind this ListView
+
+        /* OnItemClickListner class의 객체화하고 listView
+        AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String forcast =mForecastAdapter.getItem(position);
+                Toast.makeText(getActivity(), forcast, Toast.LENGTH_SHORT).show();
+            }
+        };
+        listView.setOnItemClickListener(clickListener);
+        이게 아래와 같은 결과임*/
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // item을 클릭했을 때 view를 정의하는 class를 정하고 객체화
+
+          @Override
+          // OnItemClickListner class의 public method인 onClickItem을 재정의
+          public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+           // adapterView의 item이 click 되었을 때 가동
+            String forecast = mForecastAdapter.getItem(position);
+            // public abstract Object getItem(int position)
+            // gets the data item associated with the specified position in the data set
+            // position - the position of the view in the adapter
+            // id - the row id of the item that was clicked
+            Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+            //chain 형식으로 toast 정의 .makeText(context, text, duration)
+            }
+            });
 
         return rootView;
     }
