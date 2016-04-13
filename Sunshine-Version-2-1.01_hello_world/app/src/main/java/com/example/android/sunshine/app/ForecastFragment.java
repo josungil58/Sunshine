@@ -137,8 +137,11 @@ public class ForecastFragment extends Fragment {
             // position - the position of the view in the adapter
             // id - the row id of the item that was clicked
             Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
-            //chain 형식으로 toast 정의 .makeText(context, text, duration)
-            }
+            // chain 형식으로 toast 정의 .makeText(context, text, duration)
+            // getApplicationContext(), getContext() 등은 에러 발생
+            // getActivity()
+            // Return the Activity this fragment is currently associated with.
+          }
             });
 
         return rootView;
