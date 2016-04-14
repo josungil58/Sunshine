@@ -30,6 +30,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a (@link ListView) layout
@@ -45,6 +47,7 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // callback method
         //called to do initial creation of a fragment
         //Bundle에 저장된 Instance State를 불러옴
         //onCreate()는 여기서는 public으로 지정해야 main activity에서 사용 가능
@@ -83,7 +86,7 @@ public class ForecastFragment extends Fragment {
         //onCreateView()는 fragment가 자신의 user interface를 instantiate 하기 위해 call
 
         //create some dummy data for the ListView.
-      /*  String[] data = {
+        String[] data = {
                 "Today - Sunny - 88/63",
                 "Tommorrow - Foggy - 70/40",
                 "Weds - Cloudy - 72/63",
@@ -93,14 +96,13 @@ public class ForecastFragment extends Fragment {
                 "Sun - Sunny - 80/68"
         };
         List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
-*/
-        ArrayList weekForecast = new ArrayList<>();
+        //ArrayList weekForecast = new ArrayList<>();
         //create an ArrayAdapter
         mForecastAdapter =
                 new ArrayAdapter<String>(
                         getActivity(),
                         R.layout.list_item_forecast,//layout .xml file's name
-                        R.id.list_item_forecast_textview,//.xml file 내 textview's id
+                        R.id.list_item_forecast_textview,//list_item_forecat.xml file 내 textview's id
                         weekForecast
                 );
         //public ArrayAdapter(Context context, int resource, int textViewResourceID, T[] objects) 형태의 constructor

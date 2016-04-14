@@ -42,7 +42,6 @@ public class DetailActivity extends ActionBarActivity {
     public static class PlaceholderFragment extends Fragment{
 
         public PlaceholderFragment(){
-
         }
 
         @Override
