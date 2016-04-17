@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -16,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -138,16 +138,25 @@ public class ForecastFragment extends Fragment {
             // gets the data item associated with the specified position in the data set
             // position - the position of the view in the adapter
             // id - the row id of the item that was clicked
-            Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
             // chain 형식으로 toast 정의 .makeText(context, text, duration)
             // getApplicationContext(), getContext() 등은 에러 발생
             // getActivity()
             // Return the Activity this fragment is currently associated with.
+
+              Intent intent = new Intent(getActivity(), DetailActivity.class)
+                      // public final Activity getActivity() - returns the Activity this fragment is
+                      // currently associated with
+                      .putExtra(Intent.EXTRA_TEXT, forecast);
+              // publid Intent putExtra(String name, Bundle Value)
+              // add extended data to the intent
+              startActivity(intent);
           }
             });
 
         return rootView;
     }
+
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         //AsyncTask enables proper and easy use of the UI thread.
