@@ -25,9 +25,10 @@ public class MainActivity extends ActionBarActivity {
         //content의 view는 layout.activity_main.xml 화일로 지정
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    //beginTransaction()은 activity state저장전에 사용
+                    // beginTransaction()은 activity state저장전에 사용
                     .add(R.id.container, new ForecastFragment())
-                            //FragmentTransaction class 참조
+                    // FragmentTransaction class 참조
+                    // Fragment class file을 따로 만들든 nested로 정의를 하든 activity와 Fragment를 연결하는 방식은 같음
                     .commit();
         }
     }
