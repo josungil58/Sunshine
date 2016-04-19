@@ -23,11 +23,19 @@ public class SettingsActivity extends PreferenceActivity
         // Add 'general' preferences, defined in the XML file
         // TODO: Add preferences from XML
         addPreferencesFromResource(R.xml.pref_general);
+        // even though this method was deprecated, it works fine. No problem!
+        // public void addPreferenceFromResource(int prederencedResId)
+        // this method was deprecated in API level 11.
+        // This function is not relevant for a modern fragmenbased PreferenceActivity.
+        // inflates the given Xml resource.
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         // TODO: Add preferences
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+        // 뒷 부분에 정의된 새로운 method
+        // public Preference findPreference(CharSequence key)
+        // finds a Preference based on its key.
     }
 
     /**
@@ -38,6 +46,8 @@ public class SettingsActivity extends PreferenceActivity
     private void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(this);
+        // public void setOnPreferenceChangeListner(Prerence.OnPreferenceChangeListner onPreferenceChangeListner)
+        // sets the callback to be invoked when this Preference is changed by the user.
 
         // Trigger the listener immediately with the preference's
         // current value.
@@ -45,6 +55,9 @@ public class SettingsActivity extends PreferenceActivity
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
+        // public abstract boolean onPreferenceChange(Preference preference, Object newValue)
+        // called when a Preference has been changed by the user.
+        // This is called before the state of the Preference is about to be updated.
     }
 
     @Override
