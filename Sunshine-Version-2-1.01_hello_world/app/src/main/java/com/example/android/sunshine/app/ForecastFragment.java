@@ -32,8 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a (@link ListView) layout
@@ -74,18 +72,7 @@ public class ForecastFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {//main.xml의 item id
-            FetchWeatherTask weatherTask = new FetchWeatherTask();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            // PreferenceManager class is used to help create Preference hierarchy
-            // public staticPreferences instance that points to the default file that is used by
-            // the preference framework in the given context
-            String location = prefs.getString(getString(R.string.pref_location_key),
-                    getString(R.string.pref_location_default));
-            // SharedPreference.getString(String key, String defValue)
-            // retrieves a String value from the preferences
-            // Context.getString(int resID) returns a localized string from the application's package's default string table
-            weatherTask.execute(location);
-            // 서울 강서구 구 우편번호 입력 - 구글 서울날씨와 결과가 많이 다름
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -97,6 +84,7 @@ public class ForecastFragment extends Fragment {
         //onCreateView()는 fragment가 자신의 user interface를 instantiate 하기 위해 call
 
         //create some dummy data for the ListView.
+/*
         String[] data = {
                 "Today - Sunny - 88/63",
                 "Tommorrow - Foggy - 70/40",
@@ -107,23 +95,25 @@ public class ForecastFragment extends Fragment {
                 "Sun - Sunny - 80/68"
         };
         List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
+*/
         //ArrayList weekForecast = new ArrayList<>();
+
         //create an ArrayAdapter
         mForecastAdapter =
                 new ArrayAdapter<String>(
                         getActivity(),
                         R.layout.list_item_forecast,//layout .xml file's name
                         R.id.list_item_forecast_textview,//list_item_forecat.xml file 내 textview's id
-                        weekForecast
-                );
-        //public ArrayAdapter(Context context, int resource, int textViewResourceID, T[] objects) 형태의 constructor
-        //resource - ID for a layout file
+                        new ArrayList<String>());
+        // public ArrayAdapter(Context context, int resource, int textViewResourceID, List<T> objects) 형태의 constructor
+        // resource - ID for a layout file
         // 여기를 인터넷으로 받은 data로 바로 집어넣을 수 있어야 한다.
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ListView listView = (ListView) rootView.findViewById(
                 R.id.listview_forecast);//fragment_main.xml listview id
         listView.setAdapter(mForecastAdapter);//sets the data behind this ListView
+        // 이 파일 맨 끝에 있는 onPostExecute method에서 mForecastAdapter의 data가 변화됨
 
         /* OnItemClickListner class의 객체화하고 listView
         AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
@@ -167,8 +157,26 @@ public class ForecastFragment extends Fragment {
 
         return rootView;
     }
+    private void updateWeather() {
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        // PreferenceManager class is used to help create Preference hierarchy
+        // public staticPreferences instance that points to the default file that is used by
+        // the preference framework in the given context
+        String location = prefs.getString(getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default));
+        // SharedPreference.getString(String key, String defValue)
+        // retrieves a String value from the preferences
+        // Context.getString(int resID) returns a localized string from the application's package's default string table
+        weatherTask.execute(location);
+        // 서울 강서구 구 우편번호 입력 - 구글 서울날씨와 결과가 많이 다름
+    }
 
-
+    @Override
+    public void onStart(){
+        super.onStart();
+        updateWeather();
+    }
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         //AsyncTask enables proper and easy use of the UI thread.
         //AsyncTask should ideally be used for short operations (a few seconds at the most)
