@@ -76,8 +76,14 @@ public class ForecastFragment extends Fragment {
         if (id == R.id.action_refresh) {//main.xml의 item id
             FetchWeatherTask weatherTask = new FetchWeatherTask();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            // PreferenceManager class is used to help create Preference hierarchy
+            // public staticPreferences instance that points to the default file that is used by
+            // the preference framework in the given context
             String location = prefs.getString(getString(R.string.pref_location_key),
                     getString(R.string.pref_location_default));
+            // SharedPreference.getString(String key, String defValue)
+            // retrieves a String value from the preferences
+            // Context.getString(int resID) returns a localized string from the application's package's default string table
             weatherTask.execute(location);
             // 서울 강서구 구 우편번호 입력 - 구글 서울날씨와 결과가 많이 다름
             return true;
