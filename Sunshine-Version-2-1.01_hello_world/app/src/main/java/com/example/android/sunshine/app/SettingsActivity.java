@@ -33,6 +33,7 @@ public class SettingsActivity extends PreferenceActivity
         // updated when the preference changes.
         // TODO: Add preferences
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
         // 뒷 부분에 정의된 새로운 method
         // public Preference findPreference(CharSequence key)
         // finds a Preference based on its key.
