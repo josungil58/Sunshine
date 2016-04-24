@@ -11,6 +11,7 @@
     typically from the action bar. The ActionBar is limited real estate, so shorter is better.-->
 
     <string name="action_settings">Settings</string>
+    <string name="action_map">Map Location</string>
 
     <!--Menu label to fetch updated weather info from the server-->
 
@@ -27,7 +28,9 @@
     <string name="pref_units_label_imperial">Imperial</string>
     <string name="pref_units_key" translatable="false">units</string>
     <string name="pref_units_metric" translatable="false">metric</string>
-    <string name="pref_units_imperial" translatable="false">Imperial</string>
+    <string name="pref_units_imperial" translatable="false">imperial</string>
+    // in ForecastFragment. file, it is used as unitType.
+    // 아직 단위표기가 화면에 display되는 기능은 추가되지 않았음
 
 
 </resources>

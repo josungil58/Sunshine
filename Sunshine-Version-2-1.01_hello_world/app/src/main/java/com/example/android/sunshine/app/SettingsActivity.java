@@ -47,7 +47,7 @@ public class SettingsActivity extends PreferenceActivity
     private void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(this);
-        // public void setOnPreferenceChangeListner(Prerence.OnPreferenceChangeListner onPreferenceChangeListner)
+        // public void setOnPreferenceChangeListner(Preference.OnPreferenceChangeListner onPreferenceChangeListner)
         // sets the callback to be invoked when this Preference is changed by the user.
 
         // Trigger the listener immediately with the preference's
@@ -76,6 +76,7 @@ public class SettingsActivity extends PreferenceActivity
         } else {
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
+            // public void setSummary(CharSequence summary)
         }
         return true;
     }
