@@ -149,7 +149,7 @@ public class ForecastFragment extends Fragment {
                       // public final Activity getActivity() - returns the Activity this fragment is
                       // currently associated with
                       .putExtra(Intent.EXTRA_TEXT, forecast);
-              // publid Intent putExtra(String name, Bundle Value)
+              // public Intent putExtra(String name, Bundle Value)
               // add extended data to the intent
               startActivity(intent);
           }
