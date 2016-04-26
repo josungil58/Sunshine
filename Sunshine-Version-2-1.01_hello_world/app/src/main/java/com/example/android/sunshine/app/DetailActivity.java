@@ -86,12 +86,22 @@ public class DetailActivity extends ActionBarActivity {
 
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
             inflater.inflate(R.menu.detailfragment, menu);
+
+            // Get the menu item
             MenuItem menuItem = menu.findItem(R.id.action_share);
+            // Get the provider
             ShareActionProvider mShareActionProvider =
                     (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+            // ShareActionProvider is a provider for a share action.
+            // MenuItemCompat - class that helps access features in Menuitem
+            // public static ActionProvider getActionProvider(MenuItem item)
+            // gets in ActionProvider
 
             if (mShareActionProvider != null){
                 mShareActionProvider.setShareIntent(createShareForecastIntent());
+            // When you want to set the share intent, above is used.
+            // ShareActionProvider.setShareIntent(intent shareintent)
+            // sets an intent with information about the share action.
             } else {
                 Log.d(LOG_TAG, "Share Action Provide is null");
             }
@@ -99,10 +109,14 @@ public class DetailActivity extends ActionBarActivity {
 
         private Intent createShareForecastIntent(){
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            // ACTION_SEND에 의해 이메일도 같이 올라 옴/차별성 공부 필요요
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+            // flags control how the system handles an Activity when you try to start it.
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_TEXT,
                     mForecastStr + FORECAST_SHARE_HASHTAG);
+            // data에 #SunshineApp이라는 문구 추가되어서 공유
+            // putExtra(String name, CharSequence value) adds extended data to the intent.
             return shareIntent;
         }
     }
