@@ -16,6 +16,14 @@ import android.preference.PreferenceManager;
  */
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
+    // PreferenceActivity는 settings(환경설정, preference)의 내용을 담고있는 xml file의
+    // display를 담당
+    // http://blog.naver.com/2hyoin/220471574820 설명 참조
+   /* PreferenceActivity를 이용해 Preference를 구현하기 위한 두가지 단계
+    - PreferenceActivity를 상속하는 커스텀 클래스 정의
+    - onCreate()에 내부에서 Preference 계층 구조를 가져오는 메서드 호출
+    [출처] [Android 사용법] Preference 사용법|작성자 사자머리님
+*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,8 +34,9 @@ public class SettingsActivity extends PreferenceActivity
         // even though this method was deprecated, it works fine. No problem!
         // public void addPreferenceFromResource(int prederencedResId)
         // this method was deprecated in API level 11.
-        // This function is not relevant for a modern fragmenbased PreferenceActivity.
+        // This function is not relevant for a modern fragment-based PreferenceActivity.
         // inflates the given Xml resource.
+        // PreferenceActivity - PreferenceFragment로 바뀌었음
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.

@@ -61,6 +61,10 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {//main.xml의 item
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
+        // Intent(Context packageContext, Class<?> cls)
+        // Context can be invoked using
+        // .getApplicationContext(), .getContext(), getBaseContext() or this(in the Activity Class)
+        // 'this' refers to the context of the current context
         }
 
         if (id == R.id.action_map){
@@ -75,6 +79,10 @@ public class MainActivity extends ActionBarActivity {
         private void openPreferenceLocaitonInMap(){
             SharedPreferences sharedPrefs =
                     PreferenceManager.getDefaultSharedPreferences(this);
+            // public interface SharedPreferences
+            // interface for accessing and modifying preference data returned by getSharedPreferences(String, int)
+            // public static SharedPreferences getDefaultSharedPreferences(Context context)
+            //
             String location = sharedPrefs.getString(
                     getString(R.string.pref_location_key),
                     getString(R.string.pref_location_default));
@@ -82,6 +90,7 @@ public class MainActivity extends ActionBarActivity {
             // Using the URI scheme for showing a location found on a map. This super-handy
             // intent can is detailed in the "Common Intents" page of Android's developer site:
             // http://developer.android.com/guide/component/intents.common.html#maps
+            // public abstract String getString(String key, String defValue)
 
             Uri geolocation = Uri.parse("geo:0,0?").buildUpon()
                     .appendQueryParameter("q", location)
