@@ -82,6 +82,7 @@ public class MainActivity extends ActionBarActivity {
             // public interface SharedPreferences
             // interface for accessing and modifying preference data returned by getSharedPreferences(String, int)
             // public static SharedPreferences getDefaultSharedPreferences(Context context)
+            // 환경설정(settings)을 하기 위한 preference에서 저장된 data값을 활용
             //
             String location = sharedPrefs.getString(
                     getString(R.string.pref_location_key),
@@ -95,11 +96,18 @@ public class MainActivity extends ActionBarActivity {
             Uri geolocation = Uri.parse("geo:0,0?").buildUpon()
                     .appendQueryParameter("q", location)
                     .build();
+            // Maps intent에 전달되는 모든 문자열은 Uri로 encoding되어야 함.
+            // android.net.Uri.parse() method를 사용하여서 문자열을 encoding할 수 있음
+            // geo: latituce, longitude ?z=zoom; intent를 사용하여서 지도의 중심점을 설정
+            // z는 0(세계지도)부터 21(개별건물)까지 수준을 정할 수 있음.
+            // z값에 변화를 주어봤지만 별 차이가 없었음
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(geolocation);
 
             if (intent.resolveActivity(getPackageManager()) != null) {
+            //  app이 intent를 수신할 수 있는지 확인, 결과가 null이 아니라는 소리는 intent를 처리할 수 있는
+            //  앱이 적어도 하나는 있다는 말, null은 해당 intent를 사용해서는 안됨.에러 발생
                 startActivity(intent);
             } else {
                 Log.d(LOG_TAG, "Couldn't call " + location + ". no receiving apps installed!");

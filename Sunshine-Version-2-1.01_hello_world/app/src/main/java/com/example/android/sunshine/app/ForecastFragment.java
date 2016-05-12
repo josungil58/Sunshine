@@ -131,7 +131,8 @@ public class ForecastFragment extends Fragment {
         // item을 클릭했을 때 view를 정의하는 class를 정하고 객체화
 
           @Override
-          // OnItemClickListner class의 public method인 onClickItem을 재정의
+          // OnItemClickListner class의 public method인 onClickItem을 재정의]['ㅔ;
+
           public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
            // adapterView의 item이 click 되었을 때 가동
             String forecast = mForecastAdapter.getItem(position);
@@ -148,8 +149,9 @@ public class ForecastFragment extends Fragment {
               Intent intent = new Intent(getActivity(), DetailActivity.class)
                       // public final Activity getActivity() - returns the Activity this fragment is
                       // currently associated with
+                      // Intent(Context packageContext, class<?> cls)
                       .putExtra(Intent.EXTRA_TEXT, forecast);
-              // public Intent putExtra(String name, Bundle Value)
+              // public Intent putExtra(String name, CharaSequence Value)
               // add extended data to the intent
               startActivity(intent);
           }
@@ -239,10 +241,12 @@ public class ForecastFragment extends Fragment {
             final String OWM_DESCRIPTION = "main";
 
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
-            //forecastJsonStr data를 JSON Object화 하는 작업
+            // forecastJsonStr data를 JSON Object화 하는 작업
+            // internet을 통해 받은 Json objectdls forecastJsonStr data 모두를 instantiate
             JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
             //public JSONArray getJSONArray(String name)
-            //-returns the value mapped by name if it exists and is a JSONArray, ot throws otherwise.
+            //-returns the value mapped by name if it exists and is a JSONArray, ot throws otherwise
+            // Json Object에서 list란 array값으로 JSON Array로 변환.
 
             // OWM returns daily forecasts based upon the local time of the city that is being
             // asked for, which means that we need to know the GMT offset to translate this data
@@ -284,17 +288,21 @@ public class ForecastFragment extends Fragment {
             String unitType = sharedPrefs.getString(
                     getString(R.string.pref_units_key),
                     getString(R.string.pref_units_metric));
+            // SettingsActivity가 preferenceActivity로 sharedPreferences에 저장한 data 활용
 
 
             for (int i = 0; i < weatherArray.length(); i++) {
                 // JSONArray.length() returns the number of values in this array
                 // For now, using the format "Day, description, hi/low"
+                // weatherArray는 list안의 JSONArray data
                 String day;
                 String description;
                 String highAndLow;
 
                 // Get the JSON object representing the day
                 JSONObject dayForecast = weatherArray.getJSONObject(i);
+                // numDays 만큼의 날짜뵬 data
+                // JSONArray에서 각 JSON Object(key/value) 추출
 
                 // The date/time is returned as a long.  We need to convert that
                 // into something human-readable, since most people won't read "1400356800" as
