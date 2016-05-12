@@ -455,6 +455,7 @@ public class ForecastFragment extends Fragment {
                 return getWeatherDataFromJson(forecastJsonStr, numDays);
                 // doInBackground에서 나오는 결과물이 결국에는 getWeatherDataFromJson()의 결과값이고
                 // 이 값들이 onPostExecute를 통해 UI thread로 표출되는 것으로 보임
+                // 전체 data 중에서 필요한 것만 골라서 return하라는 의미
 
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
