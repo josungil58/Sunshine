@@ -180,8 +180,10 @@ public class ForecastFragment extends Fragment {
         updateWeather();
     }
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
-        //AsyncTask enables proper and easy use of the UI thread.
-        //AsyncTask should ideally be used for short operations (a few seconds at the most)
+        // android.os.AsyncTask<Params, Progress, Results>
+        // Params; background 작업시 필요한 data의 type 지정
+        // Progress; 작업중 진행상황을 표시하는 data의 type
+        // Results; 작업완료후 return할 data의 type
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
         //.getSimpleName() returns simple name of the class
@@ -276,6 +278,7 @@ public class ForecastFragment extends Fragment {
             dayTime = new Time();
 
             String[] resultStrs = new String[numDays];
+            // String Array resultStrs를 instantiate
 
             // Data is fetched in Celcius by default.
             // If user prefers to see in Farenheit, convert the values here.
@@ -304,6 +307,8 @@ public class ForecastFragment extends Fragment {
                 // numDays 만큼의 날짜뵬 data
                 // JSONArray에서 각 JSON Object(key/value) 추출
 
+                Log.v(LOG_TAG, "dayForecast entry: " + dayForecast);
+
                 // The date/time is returned as a long.  We need to convert that
                 // into something human-readable, since most people won't read "1400356800" as
                 // "this saturday".
@@ -315,6 +320,9 @@ public class ForecastFragment extends Fragment {
                 // description is in a child array called "weather", which is 1 element long.
                 JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
                 // weather data 중에 0번째 data를 받아서 처리
+
+                Log.v(LOG_TAG, "weatherObject entry: " + weatherObject);
+
                 description = weatherObject.getString(OWM_DESCRIPTION);
                 //DESCRIPTION = main
 
@@ -340,7 +348,7 @@ public class ForecastFragment extends Fragment {
         @Override
         protected String[] doInBackground(String... params) {
             //invoke on the background thread immediately after onPreExecute() finishes executing
-
+            // .execute(params)의 data를 그 type대로 받음; location, zip code
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
 
@@ -365,7 +373,7 @@ public class ForecastFragment extends Fragment {
 
             try {
                 // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are avaiable at OWM's forecast API page, at
+                // Possible parameters are available at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
                 //String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?
                 // q=94043&mode=json&units=metric&cnt=7";
@@ -385,6 +393,7 @@ public class ForecastFragment extends Fragment {
                         //public abstract Uri.builder buildupon()
                         // - Construct a new builder, copying the attributes from this Uri
                         .appendQueryParameter(QUERY_PARAM, params[0])
+                        // doInBackground(params[])
                         //public Uri.builder appendQueryParameter(String key, String value)
                         // - Encodes the key and value and then appends the parameter to the query string
                         .appendQueryParameter(FORMAT_PARAM, format)
