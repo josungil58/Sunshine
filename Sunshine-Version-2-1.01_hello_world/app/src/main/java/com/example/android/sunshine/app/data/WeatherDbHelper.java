@@ -39,6 +39,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         final String SQL_CREATE_WEATHER_TABLE = "CREATE TABLE " + WeatherEntry.TABLE_NAME + " (" +
+                // db table의 준비 db.execSQL("CREATE TABLE weather(...);");이 기본형태
                 // Why AutoIncrement here, and not above?
                 // Unique keys will be auto-generated in either case.  But for weather
                 // forecasting, it's reasonable to assume the user will want information
@@ -46,6 +47,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 // should be sorted accordingly.
                 WeatherEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 
+                // db table의 이름과 data type을 정의
                 // the ID of the location entry associated with this weather data
                 WeatherEntry.COLUMN_LOC_KEY + " INTEGER NOT NULL, " +
                 WeatherEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
@@ -60,16 +62,23 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 WeatherEntry.COLUMN_WIND_SPEED + " REAL NOT NULL, " +
                 WeatherEntry.COLUMN_DEGREES + " REAL NOT NULL, " +
 
+                // 외래키(foreign key)의 지정
+                // 현재 이 db는 두 개의 table로 만들어져 있음에 유념
                 // Set up the location column as a foreign key to location table.
                 " FOREIGN KEY (" + WeatherEntry.COLUMN_LOC_KEY + ") REFERENCES " +
                 LocationEntry.TABLE_NAME + " (" + LocationEntry._ID + "), " +
 
                 // To assure the application have just one weather entry per day
                 // per location, it's created a UNIQUE constraint with REPLACE strategy
+                // 날짜와 위치의 중복 방지를 위해 unique 제약 설정
                 " UNIQUE (" + WeatherEntry.COLUMN_DATE + ", " +
                 WeatherEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
 
         sqLiteDatabase.execSQL(SQL_CREATE_WEATHER_TABLE);
+        // execute dataBase
+
+        // data 삽입
+        // db.execSQL("INSERT INTO table name VALUES(data);");가 기본형
     }
 
     @Override
