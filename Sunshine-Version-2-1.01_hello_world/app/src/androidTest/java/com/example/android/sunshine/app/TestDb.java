@@ -26,17 +26,20 @@ public class TestDb extends AndroidTestCase {
 
     public static final String LOG_TAG = TestDb.class.getSimpleName();
 
-    // Since we want each test to start with a clean slate
+    // Since we want each test to start with a clean state
     void deleteTheDatabase() {
         mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
+        // this method is defined in the context class.
+        // boolean deleteDatabase (String name)
     }
-
     /*
         This function gets called before each test is executed to delete the database.  This makes
         sure that we always have a clean test.
      */
+
     public void setUp() {
         deleteTheDatabase();
+        // defined method in advance to delete the database
     }
 
   /*       Students: Uncomment this test once you've written the code to create the Location
@@ -52,33 +55,44 @@ public class TestDb extends AndroidTestCase {
       // Note that there will be another table in the DB that stores the
       // Android metadata (db version information)
       final HashSet<String> tableNameHashSet = new HashSet<String>();
+      // HashSet은 Set 중에서 가장 많이 쓰이는 형태로 자료의 중복이 허용되지 아니함
       tableNameHashSet.add(WeatherContract.LocationEntry.TABLE_NAME);
       tableNameHashSet.add(WeatherContract.WeatherEntry.TABLE_NAME);
+      // HashSet에 두 개의 DB table name element로 추가
 
       mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
       SQLiteDatabase db = new WeatherDbHelper(
               this.mContext).getWritableDatabase();
+      // SQLiteDatabase getWritableDatabase () create and/or open a db that will be used for reading
+      // and writing.
       assertEquals(true, db.isOpen());
-
+      // void assertEquals(boolean expected, boolean actual) asserts that two booleans are equal.
       // have we created the tables we want?
+
       Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+      // cursor는 DB를 사용하기 위한 인터페이스
+      // Cursor rawQuery (String sql, String[] selection args) runs the provided SQL
+      // and returns a Cursor over the result set.
 
       assertTrue("Error: This means that the database has not been created correctly",
               c.moveToFirst());
+      // void assertTrue (String message, boolean condition) asserts that a condition is true.
+      // If it isn't it throws an AssertionFailedError with the given message.
 
       // verify that the tables have been created
       do {
           tableNameHashSet.remove(c.getString(0));
       } while( c.moveToNext() );
-
       // if this fails, it means that your database doesn't contain both the location entry
       // and weather entry tables
+
       assertTrue("Error: Your database was created without both the location entry and weather entry tables",
               tableNameHashSet.isEmpty());
 
       // now, do our tables contain the correct columns?
       c = db.rawQuery("PRAGMA table_info(" + WeatherContract.LocationEntry.TABLE_NAME + ")",
               null);
+      // PRAGMA table_info (table_name) will get you a list of all the column names.
 
       assertTrue("Error: This means that we were unable to query the database for table information.",
               c.moveToFirst());
@@ -96,9 +110,9 @@ public class TestDb extends AndroidTestCase {
           String columnName = c.getString(columnNameIndex);
           locationColumnHashSet.remove(columnName);
       } while(c.moveToNext());
-
       // if this fails, it means that your database doesn't contain all of the required location
       // entry columns
+
       assertTrue("Error: The database doesn't contain all of the required location entry columns",
               locationColumnHashSet.isEmpty());
       db.close();
